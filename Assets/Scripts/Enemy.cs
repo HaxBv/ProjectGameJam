@@ -1,19 +1,15 @@
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     
-    public float MoveSpeed;
-
-
-
 
     void Start()
     {
         
     }
 
-    
+    // Update is called once per frame
     void Update()
     {
         
