@@ -40,7 +40,7 @@ public class Player : Entity
 
     void Update()
     {
-        
+        MovementMechanic();
     }
 
     public void MovementMechanic()
