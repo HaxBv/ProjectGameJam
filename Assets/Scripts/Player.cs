@@ -1,16 +1,51 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public InputSystem_Actions Input;
+
+    public Vector2 MoveInput;
+
+    public void Awake()
+    {
+        Input = new ();
+    }
+    private void OnEnable()
+    {
+        Input.Enable();
+
+        Input.Player.Move.performed += OnMove;
+        Input.Player.Move.canceled += OnMove;
+        Input.Player.Move.started += OnMove;
+    }
+    private void OnDisable()
+    {
+        Input.Enable();
+
+        Input.Player.Move.performed -= OnMove;
+        Input.Player.Move.canceled -= OnMove;
+        Input.Player.Move.started -= OnMove;
+    }
+
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        MoveInput = context.ReadValue<Vector2>();
+    }
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void MovementMechanic()
+
+    {
+        transform.position += (Vector3) MoveInput * MoveSpeed * Time.deltaTime;
     }
 }
