@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Entity
 {
     public GameObject jugador;
     public float rangoPersecucion;
     public Rigidbody2D rb;
-    public float velocidadMovimiento;
+    
 
     void Start()
     {
@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
         if(distanciaJugador < rangoPersecucion)
         {
             float directionX = Mathf.Sign(jugador.transform.position.x - transform.position.x);
-            Vector2 movimiento = new Vector2(directionX, 0) * velocidadMovimiento * Time.deltaTime;
+            Vector2 movimiento = new Vector2(directionX, 0) * MoveSpeed * Time.deltaTime;
             rb.MovePosition(rb.position + movimiento);
 
         }
