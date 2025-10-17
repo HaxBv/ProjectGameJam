@@ -21,16 +21,16 @@ public class Calabaza : Enemy, ISeguimiento
             {
                 numeroGenerado = true;
                 int numeroSeleccionado = Random.Range(1, 11);
-                Debug.Log("El número seleccionado es: " + numeroSeleccionado);
+                Debug.Log("El nï¿½mero seleccionado es: " + numeroSeleccionado);
 
                 if (numeroSeleccionado <= 3)
                 {
-                    Debug.Log("Transformación activada");
+                    Debug.Log("Transformaciï¿½n activada");
                     transformado = true;
                 }
                 else
                 {
-                    Debug.Log("No hubo transformación");
+                    Debug.Log("No hubo transformaciï¿½n");
                 }
             }
 
