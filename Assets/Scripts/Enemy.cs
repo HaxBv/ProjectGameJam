@@ -1,28 +1,30 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : Entity
 {
-    public GameObject Player;
-    public float rangoPersecucion;
-    public Rigidbody2D rb;
     
+    public GameObject Player;
+    public float rangoPersecucion = 5f;
+    public Rigidbody2D rb;
 
-    void Start()
+    public bool EnemyVision = false;
+   
+
+    protected virtual void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        if(Player == null)
+        if (Player == null)
         {
-            Debug.LogWarning("No existe un juegador");
+            Player = GameObject.FindGameObjectWithTag("Player");
+            if (Player == null)
+            {
+                Debug.LogError("No se encontró un objeto con la tag 'Player'");
+            }
+        }
+
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
         }
     }
-
-  
-    void Update()
-    {
-        
-    }
-
-
-    
-
 }
