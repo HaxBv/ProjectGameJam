@@ -15,7 +15,7 @@ public class Clayface : Enemy, ISeguimiento
         {
             Vector2 direccion = (Player.transform.position - transform.position).normalized;
             Vector2 movimiento = direccion * MoveSpeed * Time.deltaTime;
-            transform.position += (Vector3)movimiento;
+            transform.position += (Vector3)movimiento; 
         }
     }
 }
