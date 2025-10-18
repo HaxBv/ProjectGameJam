@@ -95,6 +95,11 @@ public class Player : Entity
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
+            if(Pisaditas != null & Pisaditas.isPlaying)
+            {
+                Pisaditas.Stop();
+            }
+
             Destroy(gameObject);
             Debug.Log("HAS MUERTO");
         }
