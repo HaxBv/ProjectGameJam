@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
 {
@@ -57,7 +58,8 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
 
     public void SeguirPlayer()
     {
-       
+        if (Player == null)
+            return;
 
         Vector2 direccion = (Player.transform.position - transform.position).normalized;
         Vector2 movimiento = direccion * FastSpeed * Time.deltaTime;

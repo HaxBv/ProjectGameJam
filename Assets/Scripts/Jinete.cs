@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 
 public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 {
     private int direction = 1;
-    private bool isChasing = false;
+    //private bool isChasing = false;
 
     void Update()
     {
