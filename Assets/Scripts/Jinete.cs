@@ -3,19 +3,29 @@ using UnityEngine.Audio;
 
 public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 {
+
+    private AudioSource Trote;
+    private bool isMoving;
+
     private int direction = 1;
     //private bool isChasing = false;
+
+
+
 
     void Update()
     {
         UpdateStatus();
         PlayerDetected();
+        AudioControl();
     }
 
     private void DefaultMovement()
     {
         transform.position += Vector3.right * direction * NormalSpeed * Time.deltaTime;
+        isMoving = true;
     }
+
 
     public void SeguirPlayer()
     {
@@ -24,7 +34,7 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 
         float directionX = Mathf.Sign(Player.transform.position.x - transform.position.x);
 
-        // 🔹 Actualizamos la dirección (solo si cambia)
+
         if (direction != (int)directionX)
         {
             direction = (int)directionX;
@@ -33,6 +43,7 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 
         Vector2 movimiento = new Vector2(direction, 0);
         transform.position += (Vector3)movimiento * FastSpeed * Time.deltaTime;
+        isMoving = true;
     }
 
     public void PlayerDetected()
@@ -47,6 +58,8 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 
     public void UpdateStatus()
     {
+        isMoving = false;
+
         if (EnemyVision)
         {
             SeguirPlayer();
@@ -55,6 +68,24 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
         {
             DefaultMovement();
         }
+    }
+
+    private void AudioControl()
+    {
+        if(Trote == null)
+        {
+            return;
+        }
+
+        if(isMoving && !Trote.isPlaying)
+        {
+            Trote.Play();
+        }
+        else if (!isMoving && Trote.isPlaying)
+        {
+            Trote.Stop();
+        }
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
