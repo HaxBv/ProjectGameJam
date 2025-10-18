@@ -22,7 +22,7 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
             int numeroSeleccionado = Random.Range(1, 11);
             Debug.Log("El número seleccionado es: " + numeroSeleccionado);
 
-            if (numeroSeleccionado <= 3)
+            if (numeroSeleccionado <= 4)
             {
                 Debug.Log("Transformación activada");
                 transformado = true;
