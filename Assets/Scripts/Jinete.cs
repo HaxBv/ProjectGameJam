@@ -21,6 +21,12 @@ public class Jinete : Enemy, ISeguimiento
     public void SeguirPlayer()
     {
 
+        if (Player == null)
+        {
+            return;
+
+        }
+
         float distanciaJugadorY = Mathf.Abs(Player.transform.position.y - transform.position.y);
 
         if (distanciaJugadorY < rangoPersecucion)

@@ -11,6 +11,12 @@ public class PhantomCat : Enemy, ISeguimiento
 
     public void SeguirPlayer()
     {
+        if (Player == null)
+        {
+            return;
+
+        }
+
         float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
 
         if (distanciaJugador < rangoPersecucion)

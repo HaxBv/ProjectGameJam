@@ -48,4 +48,22 @@ public class Player : Entity
     {
         transform.position += (Vector3) MoveInput * MoveSpeed * Time.deltaTime;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            Debug.Log("HAS MUERTO");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            Debug.Log("HAS MUERTO");
+        }
+    }
 }

@@ -18,7 +18,7 @@ public class Enemy : Entity
             Player = GameObject.FindGameObjectWithTag("Player");
             if (Player == null)
             {
-                Debug.LogError("No se encontró un objeto con la tag 'Player'");
+                Debug.LogError("No se encontrï¿½ un objeto con la tag 'Player'");
             }
         }
 

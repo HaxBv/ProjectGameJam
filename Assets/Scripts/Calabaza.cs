@@ -12,6 +12,11 @@ public class Calabaza : Enemy, ISeguimiento
 
     public void Surprise()
     {
+        if(Player == null)
+        {
+            return;
+        }
+
         float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
 
         if (distanciaJugador < rangoPersecucion)
@@ -49,6 +54,12 @@ public class Calabaza : Enemy, ISeguimiento
 
     public void SeguirPlayer()
     {
+        if (Player == null)
+        {
+            return;
+
+        }
+
         Vector2 direccion = (Player.transform.position - transform.position).normalized;
         Vector2 movimiento = direccion * MoveSpeed * Time.deltaTime;
         transform.position += (Vector3)movimiento;
