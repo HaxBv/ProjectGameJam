@@ -1,87 +1,95 @@
 using UnityEngine;
 
-public class Clayface : Enemy, ISeguimiento
+public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
 {
-    public float ChangeDirectionTimer;
-    public float CurrentDirectionTimer;
-    public Vector2 CurrentDir;
     
+    public float ChangeDirectionTimer;  
+    
+
+   
+
     protected override void Start()
     {
         base.Start();
-
-        if(EnemyVision == false)
-        {
-            DefaultMovement();
-        }
+        DefaultMovement();
     }
 
     void Update()
     {
-        if(EnemyVision == true)
-        {
-            SeguirPlayer();
-        }
-        else
-        { 
-            Timer();
-            MoveDirection();
-        }
+        PlayerDetected();
+        UpdateStatus();
     }
 
-    public void Timer()
+    private void DefaultMovement()
     {
-        CurrentDirectionTimer += Time.deltaTime;
-        if(CurrentDirectionTimer > ChangeDirectionTimer)
+        float randomX = Random.Range(-1f, 1f);
+        float randomY = Random.Range(-1f, 1f);
+        CurrentDir = new Vector2(randomX, randomY).normalized;
+    }
+    public void PlayerDetected()
+    {
+
+
+        if (Player == null) return;
+        float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
+
+        if (distanciaJugador < rangoPersecucion)
+            EnemyVision = true;
+        else
+            EnemyVision = false;
+    }
+
+    public void UpdateStatus()
+    {
+        if (EnemyVision == true)
         {
-            DefaultMovement();
-            CurrentDirectionTimer = 0;
+
+            SeguirPlayer();
+
+        }
+
+        else
+        {
+
+            Patrullar();
         }
     }
 
     public void SeguirPlayer()
     {
-        if (Player == null)
-        {
-            EnemyVision = false;
-            DefaultMovement();
-            return;
+       
 
-        }
-
-        float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
-
-        if (distanciaJugador < rangoPersecucion)
-        {
-            EnemyVision = true;
-
-            Vector2 direccion = (Player.transform.position - transform.position).normalized;
-            Vector2 movimiento = direccion * MoveSpeed * Time.deltaTime;
-            transform.position += (Vector3)movimiento; 
-        }
-        else
-        {
-            EnemyVision = false;
-            DefaultMovement();
-        }
+        Vector2 direccion = (Player.transform.position - transform.position).normalized;
+        Vector2 movimiento = direccion * FastSpeed * Time.deltaTime;
+        transform.position += (Vector3)movimiento;
     }
 
-    public void DefaultMovement()
+  
+    private void Patrullar()
     {
-        float randomX = Random.Range(-1f, 1f);
-        float randomY = Random.Range(-1f, 1f);
-        CurrentDir = new Vector2 (randomX, randomY).normalized;
+      
+        Timer();
+        MoveDirection();
     }
 
-    public void MoveDirection()
+    private void Timer()
     {
-        Vector3 Dir = (Vector3)CurrentDir;
+        CurrentDirectionTimer += Time.deltaTime;
 
-        //Vector3 target = (Vector3)CurrentDir + transform.position;
-        //Vector3 Dir = (target - transform.position).normalized;
-
-        transform.position += Dir * MoveSpeed * Time.deltaTime;
-
+        if (CurrentDirectionTimer >= ChangeDirectionTimer)
+        {
+            DefaultMovement();
+            CurrentDirectionTimer = 0f;
+        }
     }
 
+    
+
+    private void MoveDirection()
+    {
+        Vector3 movimiento = (Vector3)CurrentDir * NormalSpeed * Time.deltaTime;
+        transform.position += movimiento;
+    }
+
+    
 }

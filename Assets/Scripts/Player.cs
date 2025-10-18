@@ -10,7 +10,7 @@ public class Player : Entity
 
     public void Awake()
     {
-        Input = new ();
+        Input = new();
     }
     private void OnEnable()
     {
@@ -35,7 +35,7 @@ public class Player : Entity
     }
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -46,7 +46,7 @@ public class Player : Entity
     public void MovementMechanic()
 
     {
-        transform.position += (Vector3) MoveInput * MoveSpeed * Time.deltaTime;
+        transform.position += (Vector3)MoveInput * NormalSpeed * Time.deltaTime;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

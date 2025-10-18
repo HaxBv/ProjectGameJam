@@ -1,50 +1,74 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Jinete : Enemy, ISeguimiento
+public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 {
-    
-    
+    private int direction = 1;
+    private bool isChasing = false;
 
     void Update()
     {
-        SeguirPlayer();
+        UpdateStatus();
+        PlayerDetected();
     }
 
-    /*public void SeguimientoDefault()
+    private void DefaultMovement()
     {
-        if (PlayerVision == false)
-        {
-            
-            transform.position += Vector2 * MoveSpeed * Time.deltaTime;
-        }
-    }*/
+        transform.position += Vector3.right * direction * NormalSpeed * Time.deltaTime;
+    }
+
     public void SeguirPlayer()
     {
-
         if (Player == null)
-        {
             return;
 
+        float directionX = Mathf.Sign(Player.transform.position.x - transform.position.x);
+
+        // 🔹 Actualizamos la dirección (solo si cambia)
+        if (direction != (int)directionX)
+        {
+            direction = (int)directionX;
+            FlipSprite();
         }
+
+        Vector2 movimiento = new Vector2(direction, 0);
+        transform.position += (Vector3)movimiento * FastSpeed * Time.deltaTime;
+    }
+
+    public void PlayerDetected()
+    {
+        if (Player == null)
+            return;
 
         float distanciaJugadorY = Mathf.Abs(Player.transform.position.y - transform.position.y);
 
-        if (distanciaJugadorY < rangoPersecucion)
+        EnemyVision = distanciaJugadorY < rangoPersecucion;
+    }
+
+    public void UpdateStatus()
+    {
+        if (EnemyVision)
         {
-            
-
-            float directionX = Mathf.Sign(Player.transform.position.x - transform.position.x);
-
-            Vector2 movimiento = new Vector2(directionX, 0);
-
-            transform.position += (Vector3)movimiento * MoveSpeed * Time.deltaTime;
-
+            SeguirPlayer();
         }
         else
         {
-            
+            DefaultMovement();
         }
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Muro"))
+        {
+            direction *= -1;
+            FlipSprite();
+        }
+    }
+
+    private void FlipSprite()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * direction;
+        transform.localScale = scale;
+    }
 }

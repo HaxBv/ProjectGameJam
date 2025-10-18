@@ -9,7 +9,9 @@ public class Enemy : Entity
     public Rigidbody2D rb;
 
     public bool EnemyVision = false;
-   
+    protected float CurrentDirectionTimer;
+    protected Vector2 CurrentDir;
+
 
     protected virtual void Start()
     {
@@ -18,7 +20,7 @@ public class Enemy : Entity
             Player = GameObject.FindGameObjectWithTag("Player");
             if (Player == null)
             {
-                Debug.LogError("No se encontr� un objeto con la tag 'Player'");
+                Debug.LogError("No se encontró un objeto con la tag 'Player'");
             }
         }
 
