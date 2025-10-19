@@ -6,9 +6,8 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
     private bool transformado = false;
     public float RangoNoMovement;
 
-    private Vector3 posicionInicial; // Guarda la posición original de la calabaza
-    private bool regresando = false; // Nuevo: indica si está volviendo a su sitio
-
+    private Vector3 posicionInicial;
+    private bool regresando = false;
 
     protected override void Start()
     {
@@ -25,6 +24,7 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
     public void Surprise()
     {
+      
         if (!numeroGenerado)
         {
             numeroGenerado = true;
@@ -42,11 +42,6 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
                 Debug.Log("No hubo transformación");
             }
         }
-
-        if (transformado)
-        {
-            SeguirPlayer();
-        }
     }
 
     public void SeguirPlayer()
@@ -54,11 +49,11 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
         if (Player == null)
             return;
 
-        regresando = false; // deja de regresar
+        regresando = false;
 
         Vector2 direccion = (Player.transform.position - transform.position).normalized;
 
-        // 🔹 Gira el sprite según la dirección en X
+      
         if (direccion.x != 0)
         {
             FlipSprite(Mathf.Sign(direccion.x));
@@ -75,19 +70,19 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
         float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
 
+       
         if (distanciaJugador < rangoPersecucion)
         {
             EnemyVision = true;
+            regresando = false;
         }
         else
         {
             EnemyVision = false;
         }
 
-        // 🔹 Si el jugador se aleja mucho, desactiva persecución y comienza a regresar
         if (distanciaJugador > RangoNoMovement)
         {
-            DefaultMovement();
             regresando = true;
         }
     }
@@ -100,26 +95,39 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
     public void UpdateStatus()
     {
-        if (EnemyVision)
+      
+        if (EnemyVision && transformado)
+        {
+            SeguirPlayer();
+        }
+       
+        else if (EnemyVision && !transformado)
         {
             Surprise();
+            if (transformado)
+                SeguirPlayer();
         }
+
         else if (regresando)
         {
-            // 🔹 Regresa a su posición original solo si está lejos
-            transform.position = Vector3.MoveTowards(transform.position, posicionInicial, NormalSpeed * Time.deltaTime);
+            RegresarAlOrigen();
+        }
+    }
 
-            float dir = posicionInicial.x - transform.position.x;
-            if (Mathf.Abs(dir) > 0.1f)
-            {
-                FlipSprite(Mathf.Sign(dir));
-            }
+    private void RegresarAlOrigen()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, posicionInicial, NormalSpeed * Time.deltaTime);
 
-            // 🔹 Si ya llegó a su posición, deja de regresar
-            if (Vector3.Distance(transform.position, posicionInicial) < 0.1f)
-            {
-                regresando = false;
-            }
+        float dir = posicionInicial.x - transform.position.x;
+        if (Mathf.Abs(dir) > 0.1f)
+        {
+            FlipSprite(Mathf.Sign(dir));
+        }
+
+        if (Vector3.Distance(transform.position, posicionInicial) < 0.1f)
+        {
+            regresando = false;
+            DefaultMovement();
         }
     }
 
