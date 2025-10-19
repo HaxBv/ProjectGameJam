@@ -4,6 +4,13 @@ using UnityEngine.Audio;
 public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
 {
     public float ChangeDirectionTimer;
+    public AudioSource Monster;
+
+    void Awake()
+    {
+        Monster = GetComponent<AudioSource>();
+    }
+
 
     protected override void Start()
     {
@@ -15,6 +22,7 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
     {
         PlayerDetected();
         UpdateStatus();
+        UpdateMonsterAudio();
     }
 
     private void DefaultMovement()
@@ -87,9 +95,28 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
         Vector3 movimiento = (Vector3)CurrentDir * NormalSpeed * Time.deltaTime;
         transform.position += movimiento;
 
-    
         if (CurrentDir.x != 0)
             FlipSprite(Mathf.Sign(CurrentDir.x));
+    }
+
+    private void UpdateMonsterAudio()
+    {
+        if (Monster == null)
+            return;
+
+        bool isMoving = EnemyVision || CurrentDirectionTimer < ChangeDirectionTimer;
+
+        if(isMoving)
+        {
+            if (!Monster.isPlaying)
+            {
+                Monster.Play();
+            }
+        }
+        else if (Monster.isPlaying)
+        {
+            Monster.Stop();
+        }
     }
 
     private void FlipSprite(float direccionX)
@@ -97,5 +124,11 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direccionX;
         transform.localScale = scale;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, rangoPersecucion);
     }
 }
