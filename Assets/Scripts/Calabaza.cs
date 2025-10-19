@@ -9,11 +9,16 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
     private Vector3 posicionInicial;
     private bool regresando = false;
 
+    [Header("Referencias")]
+    public Animator animator;
+
     protected override void Start()
     {
         base.Start();
         posicionInicial = transform.position;
-        DefaultMovement();
+
+        if (animator == null)
+            animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -24,7 +29,6 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
     public void Surprise()
     {
-      
         if (!numeroGenerado)
         {
             numeroGenerado = true;
@@ -34,11 +38,15 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
             if (numeroSeleccionado <= 4)
             {
-                Debug.Log("Transformación activada");
                 transformado = true;
+               
+                animator.Play("CalabazaTransform");
+                Debug.Log("Transformación activada");
             }
             else
             {
+                transformado = false;
+               
                 Debug.Log("No hubo transformación");
             }
         }
@@ -46,18 +54,15 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
     public void SeguirPlayer()
     {
-        if (Player == null)
+        if (Player == null || regresando)
             return;
 
-        regresando = false;
+        
 
         Vector2 direccion = (Player.transform.position - transform.position).normalized;
 
-      
         if (direccion.x != 0)
-        {
             FlipSprite(Mathf.Sign(direccion.x));
-        }
 
         Vector2 movimiento = direccion * NormalSpeed * Time.deltaTime;
         transform.position += (Vector3)movimiento;
@@ -70,64 +75,68 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
         float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
 
-       
-        if (distanciaJugador < rangoPersecucion)
+        if (!regresando && distanciaJugador < rangoPersecucion)
         {
             EnemyVision = true;
-            regresando = false;
         }
         else
         {
+            if (EnemyVision)
+            {
+                numeroGenerado = false;
+                transformado = false;
+                
+                animator.Play("CalabazaUntransform");
+            }
             EnemyVision = false;
         }
 
         if (distanciaJugador > RangoNoMovement)
         {
             regresando = true;
+            EnemyVision = false;
         }
-    }
-
-    public void DefaultMovement()
-    {
-        numeroGenerado = false;
-        transformado = false;
     }
 
     public void UpdateStatus()
     {
-      
-        if (EnemyVision && transformado)
+        if (regresando)
         {
-            SeguirPlayer();
+            RegresarAlOrigen();
         }
-       
-        else if (EnemyVision && !transformado)
+        else if (EnemyVision)
         {
-            Surprise();
+            if (!numeroGenerado)
+                Surprise();
+
             if (transformado)
                 SeguirPlayer();
         }
-
-        else if (regresando)
+        else
         {
-            RegresarAlOrigen();
+            
         }
     }
 
     private void RegresarAlOrigen()
     {
-        transform.position = Vector3.MoveTowards(transform.position, posicionInicial, NormalSpeed * Time.deltaTime);
+       
+
+        transform.position = Vector3.MoveTowards(transform.position, posicionInicial, FastSpeed * Time.deltaTime);
 
         float dir = posicionInicial.x - transform.position.x;
         if (Mathf.Abs(dir) > 0.1f)
-        {
             FlipSprite(Mathf.Sign(dir));
-        }
 
         if (Vector3.Distance(transform.position, posicionInicial) < 0.1f)
         {
             regresando = false;
-            DefaultMovement();
+            numeroGenerado = false;
+            transformado = false;
+            EnemyVision = false;
+
+            
+            animator.Play("CalabazaIdle");
         }
     }
 
