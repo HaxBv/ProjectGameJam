@@ -1,10 +1,14 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 {
     private bool numeroGenerado = false;
     private bool transformado = false;
     public float RangoNoMovement;
+
+    public AudioSource Mutant;
+    public AudioSource Shock;
 
     private Vector3 posicionInicial;
     private bool regresando = false;
@@ -25,6 +29,7 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
     {
         PlayerDetected();
         UpdateStatus();
+        UpdateMutantAudio();
     }
 
     public void Surprise()
@@ -39,9 +44,13 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
             if (numeroSeleccionado <= 4)
             {
                 transformado = true;
+
                
                 animator.Play("CalabazaTransform");
                 Debug.Log("Transformación activada");
+
+                PlayShockSound();
+
             }
             else
             {
@@ -51,6 +60,34 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
             }
         }
     }
+
+    private void PlayShockSound()
+    {
+        if (Shock != null && !Shock.isPlaying)
+        {
+            Shock.loop = false;
+            Shock.Play();
+        }
+    }
+
+    private void UpdateMutantAudio()
+    {
+        if (Mutant == null) return;
+        {
+            if(transformado)
+            {
+                if(!Mutant.isPlaying)
+                {
+                    Mutant.Play();
+                }
+            }
+            else if (Mutant.isPlaying)
+            {
+                Mutant.Stop();
+            }
+        }
+    }
+
 
     public void SeguirPlayer()
     {
@@ -145,5 +182,14 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direccionX;
         transform.localScale = scale;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rangoPersecucion);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, RangoNoMovement);
     }
 }
