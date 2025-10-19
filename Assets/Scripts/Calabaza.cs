@@ -102,6 +102,7 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
         if (Player == null)
             return;
 
+
         float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
 
 
