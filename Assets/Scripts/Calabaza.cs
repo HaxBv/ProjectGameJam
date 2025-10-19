@@ -13,16 +13,11 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
     private Vector3 posicionInicial;
     private bool regresando = false;
 
-    [Header("Referencias")]
-    public Animator animator;
-
     protected override void Start()
     {
         base.Start();
         posicionInicial = transform.position;
-
-        if (animator == null)
-            animator = GetComponent<Animator>();
+        DefaultMovement();
     }
 
     void Update()
@@ -34,6 +29,7 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
     public void Surprise()
     {
+
         if (!numeroGenerado)
         {
             numeroGenerado = true;
@@ -43,19 +39,12 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
             if (numeroSeleccionado <= 4)
             {
-                transformado = true;
-
-               
-                animator.Play("CalabazaTransform");
                 Debug.Log("Transformación activada");
-
+                transformado = true;
                 PlayShockSound();
-
             }
             else
             {
-                transformado = false;
-               
                 Debug.Log("No hubo transformación");
             }
         }
@@ -74,9 +63,9 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
     {
         if (Mutant == null) return;
         {
-            if(transformado)
+            if (transformado)
             {
-                if(!Mutant.isPlaying)
+                if (!Mutant.isPlaying)
                 {
                     Mutant.Play();
                 }
@@ -91,15 +80,18 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
     public void SeguirPlayer()
     {
-        if (Player == null || regresando)
+        if (Player == null)
             return;
 
-        
+        regresando = false;
 
         Vector2 direccion = (Player.transform.position - transform.position).normalized;
 
+
         if (direccion.x != 0)
+        {
             FlipSprite(Mathf.Sign(direccion.x));
+        }
 
         Vector2 movimiento = direccion * NormalSpeed * Time.deltaTime;
         transform.position += (Vector3)movimiento;
@@ -112,68 +104,64 @@ public class Calabaza : Enemy, ISeguimiento, IDetection, IStatus
 
         float distanciaJugador = Vector2.Distance(Player.transform.position, transform.position);
 
-        if (!regresando && distanciaJugador < rangoPersecucion)
+
+        if (distanciaJugador < rangoPersecucion)
         {
             EnemyVision = true;
+            regresando = false;
         }
         else
         {
-            if (EnemyVision)
-            {
-                numeroGenerado = false;
-                transformado = false;
-                
-                animator.Play("CalabazaUntransform");
-            }
             EnemyVision = false;
         }
 
         if (distanciaJugador > RangoNoMovement)
         {
             regresando = true;
-            EnemyVision = false;
         }
+    }
+
+    public void DefaultMovement()
+    {
+        numeroGenerado = false;
+        transformado = false;
     }
 
     public void UpdateStatus()
     {
-        if (regresando)
-        {
-            RegresarAlOrigen();
-        }
-        else if (EnemyVision)
-        {
-            if (!numeroGenerado)
-                Surprise();
 
+        if (EnemyVision && transformado)
+        {
+            SeguirPlayer();
+        }
+
+        else if (EnemyVision && !transformado)
+        {
+            Surprise();
             if (transformado)
                 SeguirPlayer();
         }
-        else
+
+        else if (regresando)
         {
-            
+            RegresarAlOrigen();
         }
     }
 
     private void RegresarAlOrigen()
     {
-       
-
-        transform.position = Vector3.MoveTowards(transform.position, posicionInicial, FastSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, posicionInicial, NormalSpeed * Time.deltaTime);
 
         float dir = posicionInicial.x - transform.position.x;
         if (Mathf.Abs(dir) > 0.1f)
+        {
             FlipSprite(Mathf.Sign(dir));
+        }
 
         if (Vector3.Distance(transform.position, posicionInicial) < 0.1f)
         {
             regresando = false;
-            numeroGenerado = false;
-            transformado = false;
-            EnemyVision = false;
-
-            
-            animator.Play("CalabazaIdle");
+            DefaultMovement();
         }
     }
 

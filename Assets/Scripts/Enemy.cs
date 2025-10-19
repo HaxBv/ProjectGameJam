@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 
 public class Enemy : Entity
 {
-    
+
     public GameObject Player;
     public float rangoPersecucion = 5f;
     public Rigidbody2D rb;
@@ -30,4 +30,5 @@ public class Enemy : Entity
             rb = GetComponent<Rigidbody2D>();
         }
     }
+
 }

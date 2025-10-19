@@ -31,7 +31,7 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
         float randomY = Random.Range(-1f, 1f);
         CurrentDir = new Vector2(randomX, randomY).normalized;
 
-        
+
         if (CurrentDir.x != 0)
             FlipSprite(Mathf.Sign(CurrentDir.x));
     }
@@ -65,7 +65,7 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
 
         Vector2 direccion = (Player.transform.position - transform.position).normalized;
 
-     
+
         if (direccion.x != 0)
             FlipSprite(Mathf.Sign(direccion.x));
 
@@ -106,7 +106,7 @@ public class Clayface : Enemy, ISeguimiento, IDetection, IStatus
 
         bool isMoving = EnemyVision || CurrentDirectionTimer < ChangeDirectionTimer;
 
-        if(isMoving)
+        if (isMoving)
         {
             if (!Monster.isPlaying)
             {

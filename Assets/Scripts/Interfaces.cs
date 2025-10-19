@@ -4,7 +4,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 public interface ISeguimiento
 {
     void SeguirPlayer();
-    
+
 }
 public interface IInteractuable
 {
@@ -18,7 +18,6 @@ public interface IDetection
 public interface IStatus
 {
     void UpdateStatus();
-    
-        
-}
 
+
+}

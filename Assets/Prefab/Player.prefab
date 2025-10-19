@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4238284748793116229}
   - component: {fileID: 2768426680804626802}
   - component: {fileID: 3584326195248085763}
+  - component: {fileID: 7430628654764335540}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -104,9 +105,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: fade09491e0abc746af7f5fb54ecf667, type: 3}
+  m_Resource: {fileID: 8300000, guid: 5445a444be763cd45be7431efa4672cc, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.556
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -240,7 +241,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.16683006, y: 0.19585037}
+  m_Offset: {x: -0.17872536, y: 0.25532246}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -250,7 +251,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.820652, y: 3.681633}
+  m_Size: {x: 2.2250464, y: 3.8005772}
   m_EdgeRadius: 0
 --- !u!95 &2768426680804626802
 Animator:
@@ -301,6 +302,14 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!81 &7430628654764335540
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916276784397125373}
+  m_Enabled: 1
 --- !u!1 &3513741558585221100
 GameObject:
   m_ObjectHideFlags: 0

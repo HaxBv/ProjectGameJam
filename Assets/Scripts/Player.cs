@@ -8,13 +8,12 @@ public class Player : Entity
     public InputSystem_Actions Input;
     private int candyCount = 0;
     public Vector2 MoveInput;
-    private Animator animator;
+    public Animator animator;
 
     public void Awake()
     {
         Input = new();
         Pisaditas = GetComponent<AudioSource>();
-        animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -59,7 +58,9 @@ public class Player : Entity
         if (animator != null)
         {
             animator.SetFloat("Movement", velocidadTotal);
+
         }
+
 
         if (velocidadX != 0)
             FlipSprite(Mathf.Sign(velocidadX));
@@ -85,30 +86,16 @@ public class Player : Entity
 
     public void CollectCandy(int amount)
     {
+        GameManager.Instance.AddDulce(amount);
         candyCount += amount;
-        Debug.Log("Caramelos Recogidos " + candyCount);
     }
-
-    private void StopAllAudio()
-    {
-        
-        AudioSource[] allAudioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
-
-        foreach (AudioSource src in allAudioSources)
-        {
-            src.Stop();
-            src.time = 0f;
-        }
-    }
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            StopAllAudio(); 
-            Debug.Log("HAS MUERTO");
             Destroy(gameObject);
+            Debug.Log("HAS MUERTO");
         }
     }
 
@@ -116,9 +103,11 @@ public class Player : Entity
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            StopAllAudio();
-            Debug.Log("HAS MUERTO");
+            if (Pisaditas != null && Pisaditas.isPlaying)
+                Pisaditas.Stop();
+
             Destroy(gameObject);
+            Debug.Log("HAS MUERTO");
         }
     }
 }

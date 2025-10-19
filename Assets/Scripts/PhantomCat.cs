@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class PhantomCat : Enemy, ISeguimiento
 {
@@ -23,12 +24,12 @@ public class PhantomCat : Enemy, ISeguimiento
             FlipSprite(Mathf.Sign(direccion.x));
         }
 
-       
+
         Vector2 movimiento = direccion * NormalSpeed * Time.deltaTime;
         transform.position += (Vector3)movimiento;
     }
 
-    
+
     private void FlipSprite(float direccionX)
     {
         Vector3 scale = transform.localScale;
