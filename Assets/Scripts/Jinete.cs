@@ -5,19 +5,24 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
 {
 
     private AudioSource Trote;
-    private bool isMoving;
+    public bool isMoving;
+
+    public float Radio;
 
     private int direction = 1;
-    //private bool isChasing = false;
 
 
+    void Awake()
+    {
+        Trote = GetComponent<AudioSource>();
+    }
 
 
     void Update()
     {
         UpdateStatus();
         PlayerDetected();
-        AudioControl();
+        TroteVolumen();
     }
 
     private void DefaultMovement()
@@ -70,22 +75,25 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
         }
     }
 
-    private void AudioControl()
+    private void TroteVolumen()
     {
-        if(Trote == null)
+        if (Trote == null || Player == null)
         {
             return;
         }
 
-        if(isMoving && !Trote.isPlaying)
+        float distance = Vector2.Distance(transform.position, Player.transform.position);
+        if (distance <= Radio)
         {
-            Trote.Play();
+            if (!Trote.isPlaying)
+            {
+                Trote.Play();
+            }
         }
-        else if (!isMoving && Trote.isPlaying)
+        else if (Trote.isPlaying)
         {
             Trote.Stop();
         }
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -102,5 +110,10 @@ public class Jinete : Enemy, ISeguimiento, IDetection, IStatus
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direction;
         transform.localScale = scale;
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, Radio);
     }
 }

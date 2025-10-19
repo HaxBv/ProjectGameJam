@@ -52,10 +52,15 @@ public class Player : Entity
     public void Animation()
     {
         float velocidadX = MoveInput.x;
+        float velocidadY = MoveInput.y;
+        float velocidadTotal = MoveInput.magnitude; 
 
-       
         if (animator != null)
-            animator.SetFloat("Movement", Mathf.Abs(velocidadX));
+        {
+            animator.SetFloat("Movement", velocidadTotal);
+            animator.SetFloat("MoveX", velocidadX);
+            animator.SetFloat("MoveY", velocidadY);
+        }
 
        
         if (velocidadX != 0)
