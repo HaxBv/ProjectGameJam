@@ -58,8 +58,7 @@ public class Player : Entity
         if (animator != null)
         {
             animator.SetFloat("Movement", velocidadTotal);
-            animator.SetFloat("MoveX", velocidadX);
-            animator.SetFloat("MoveY", velocidadY);
+           
         }
 
        
