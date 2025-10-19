@@ -132,10 +132,10 @@ MonoBehaviour:
   NormalSpeed: 5
   FastSpeed: 0
   Player: {fileID: 0}
-  rangoPersecucion: 10
+  rangoPersecucion: 15
   rb: {fileID: 0}
-  EnemyVision: 0
-  RangoNoMovement: 14
+  EnemyVision: 1
+  RangoNoMovement: 15
 --- !u!61 &-410295340120918904
 BoxCollider2D:
   m_ObjectHideFlags: 0

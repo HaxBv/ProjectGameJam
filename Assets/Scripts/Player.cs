@@ -10,6 +10,7 @@ public class Player : Entity
     private int candyCount = 0;
     public Vector2 MoveInput;
 
+    public Animator animator;
     public void Awake()
     {
         Input = new();
